@@ -114,7 +114,7 @@ mixin link(href, name)
 <a class="btn" href="/foo">foo</a>
 ```
 
-渡した属性はエスケープされるのでエスケープを防ぐには`!=`を利用する（https://pugjs.org/language/attributes.html#unescaped-attributes）。
+渡した属性はエスケープされるのでエスケープを防ぐには`!=`を利用する（[https://pugjs.org/language/attributes.html#unescaped-attributes](https://pugjs.org/language/attributes.html#unescaped-attributes)）。
 
 
 `&attributes`を利用すれば、より短く書ける。
