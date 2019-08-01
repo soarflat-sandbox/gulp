@@ -10,10 +10,39 @@
   </head>
   <body>
     <header class="p-header">
-      <p>Header</p>
+      <p class="p-header-logo">Header</p>
+      <ul class="p-header-list">
+        <li class="p-header-list-item"><a href="/">Top</a></li>
+        <li class="p-header-list-item"><a href="/about.html">About</a></li>
+      </ul>
     </header>
-    <h1>Gulp</h1><a href="./about.html">About</a>
-    <footer>
+    <main>
+      <form class="p-form">
+        <div class="p-form-item">
+          <label class="p-form-item__label">お名前</label>
+          <div class="p-form-item__content">
+            <input class="c-input" type="text" autocomplete="off">
+          </div>
+        </div>
+        <div class="p-form-item">
+          <label class="p-form-item__label">住所</label>
+          <div class="p-form-item__content">
+            <input class="c-input" type="text" autocomplete="off">
+          </div>
+        </div>
+      </form>
+            <div class="p-thumbs">
+              <div class="p-thumbslist m-t-20">
+                      <div class="p-thumbslist__item"><img src="/images/image1.jpg"></div>
+                      <div class="p-thumbslist__item"><img src="/images/image2.jpg"></div>
+                      <div class="p-thumbslist__item"><img src="/images/image3.jpg"></div>
+                      <div class="p-thumbslist__item"><img src="/images/image1.jpg"></div>
+                      <div class="p-thumbslist__item"><img src="/images/image2.jpg"></div>
+                      <div class="p-thumbslist__item"><img src="/images/image3.jpg"></div>
+              </div>
+            </div>
+    </main>
+    <footer class="p-footer">
       <p>Footer</p>
     </footer>
   </body>

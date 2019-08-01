@@ -1,0 +1,17 @@
+@import '../../utilities/functions';
+@import '../../utilities/variables';
+
+$spaceamounts: (5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 75, 100);
+$sides: (top);
+
+@each $space in $spaceamounts {
+  @each $side in $sides {
+    .m-#{str-slice($side, 0, 1)}-#{$space} {
+      margin-#{$side}: #{get-vw($space)} !important;
+
+      @media screen and (min-width: $tablet) {
+        margin-#{$side}: #{$space}px !important;
+      }
+    }
+  }
+}

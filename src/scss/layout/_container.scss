@@ -1,0 +1,5 @@
+@import '../utilities/mixins';
+
+.l-container {
+  @include padding(0, 20);
+}

@@ -1,9 +1,10 @@
-@function get_vw($size, $viewport:375){
-  $rate: 100 / $viewport;
-  @return $rate * $size * 1vw;
-}
+@import '_variables';
 
-@mixin fz_vw($font_size:10){
-  font-size: $font_size * 1px;
-  font-size: get_vw($font_size);
+@function get-vw($size, $viewport: $base-viewport) {
+  $rate: 100 / $viewport;
+  @if $size == 0 {
+    @return 0;
+  } @else {
+    @return $rate * $size * 1vw;
+  }
 }

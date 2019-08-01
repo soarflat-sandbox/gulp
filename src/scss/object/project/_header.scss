@@ -1,5 +1,30 @@
+@import '../../utilities/mixins';
+
 .p-header {
-  padding: 10px;
-  background: #000;
+  display: flex;
+  align-items: center;
+  @include padding(10, 15);
   color: #fff;
-} 
+  background: #000;
+}
+
+.p-header-logo {
+  @include font-size(16);
+  margin-right: auto;
+}
+
+.p-header-list {
+  display: flex;
+}
+
+.p-header-list-item {
+  @include margin(0, 0, 0, 10);
+
+  a {
+    color: #fff;
+  }
+
+  &:first-child {
+    margin-left: 0;
+  }
+}

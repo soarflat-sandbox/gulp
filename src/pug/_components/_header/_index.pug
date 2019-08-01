@@ -1,3 +1,18 @@
 //- トップ用のヘッダー
+-
+  items = [
+    {
+      title: 'Top',
+      url: '/'
+    },
+    {
+      title: 'About',
+      url: '/about.html'
+    }
+  ]
 header.p-header
-  p Header
+  p.p-header-logo Header
+  ul.p-header-list
+    each item in items
+      li.p-header-list-item
+        a(href=item.url) #{item.title}

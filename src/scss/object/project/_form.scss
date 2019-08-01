@@ -1,0 +1,21 @@
+@import '../../utilities/functions';
+@import '../../utilities/mixins';
+@import '../../utilities/variables';
+
+.p-form {
+  @include padding(0, $base-padding);
+}
+
+.p-form-item {
+  display: flex;
+  align-items: center;
+  @include margin(20, 0, 0, 0);
+
+  .p-form-item__label {
+    width: get-vw(50);
+  }
+
+  .p-form-item__content {
+    flex-grow: 1;
+  }
+}

@@ -1,0 +1,99 @@
+@import '_variables';
+@import '_functions';
+
+// フォントサイズを指定する
+// remに対応していないブラウザには、px指定がされる
+@mixin font-size($size: 14) {
+  font-size: $size + px;
+  font-size: ($size / $base-font-size) + rem;
+
+  @media screen and (min-width: $tablet) {
+    font-size: $size + px;
+  }
+}
+
+// padding を指定する
+@mixin padding($values...) {
+  $lengh: length($values);
+  @if $lengh == 1 {
+    $value: nth($values, 1);
+    padding: #{get-vw($value)};
+
+    @media screen and (min-width: $tablet) {
+      padding: #{$value * 1px};
+    }
+  } @else if $lengh == 2 {
+    $value: nth($values, 1);
+    $value2: nth($values, 2);
+    padding: #{get-vw($value)} #{get-vw($value2)};
+
+    @media screen and (min-width: $tablet) {
+      padding: #{$value * 1px} #{$value2 * 1px};
+    }
+  } @else if $lengh == 3 {
+    $value: nth($values, 1);
+    $value2: nth($values, 2);
+    $value3: nth($values, 3);
+    padding: #{get-vw($value)} #{get-vw($value2)} #{get-vw($value3)};
+
+    @media screen and (min-width: $tablet) {
+      padding: #{$value * 1px} #{$value2 * 1px} #{$value3 * 1px};
+    }
+  } @else if $lengh == 4 {
+    $value: nth($values, 1);
+    $value2: nth($values, 2);
+    $value3: nth($values, 3);
+    $value4: nth($values, 4);
+    padding: #{get-vw($value)}
+      #{get-vw($value2)}
+      #{get-vw($value3)}
+      #{get-vw($value4)};
+
+    @media screen and (min-width: $tablet) {
+      padding: #{$value * 1px} #{$value2 * 1px} #{$value3 * 1px} #{$value4 * 1px};
+    }
+  }
+}
+
+// margin を指定する
+@mixin margin($values...) {
+  $lengh: length($values);
+  @if $lengh == 1 {
+    $value: nth($values, 1);
+    margin: #{get-vw($value)};
+
+    @media screen and (min-width: $tablet) {
+      margin: #{$value * 1px};
+    }
+  } @else if $lengh == 2 {
+    $value: nth($values, 1);
+    $value2: nth($values, 2);
+    margin: #{get-vw($value)} #{get-vw($value2)};
+
+    @media screen and (min-width: $tablet) {
+      margin: #{$value * 1px} #{$value2 * 1px};
+    }
+  } @else if $lengh == 3 {
+    $value: nth($values, 1);
+    $value2: nth($values, 2);
+    $value3: nth($values, 3);
+    margin: #{get-vw($value)} #{get-vw($value2)} #{get-vw($value4)};
+
+    @media screen and (min-width: $tablet) {
+      margin: #{$value * 1px} #{$value2 * 1px} #{$value3 * 1px};
+    }
+  } @else if $lengh == 4 {
+    $value: nth($values, 1);
+    $value2: nth($values, 2);
+    $value3: nth($values, 3);
+    $value4: nth($values, 4);
+    margin: #{get-vw($value)}
+      #{get-vw($value2)}
+      #{get-vw($value3)}
+      #{get-vw($value4)};
+
+    @media screen and (min-width: $tablet) {
+      margin: #{$value * 1px} #{$value2 * 1px} #{$value3 * 1px} #{$value4 * 1px};
+    }
+  }
+}

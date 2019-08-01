@@ -1,0 +1,35 @@
+@import '../../utilities/functions';
+@import '../../utilities/mixins';
+@import '../../utilities/variables';
+
+.p-thumbs {
+  @include padding(0, $base-padding);
+}
+
+.p-thumbslist {
+  $margin: 5;
+  display: flex;
+  flex-wrap: wrap;
+  @include margin(0, 0, 0, -$margin);
+
+  .p-thumbslist__item {
+    $thumbs-list-width: $base-viewport - $base-padding * 2;
+    // 一行に表示する画像の枚数
+    $thumbs-number-per-row: 5;
+    // 一行に表示する画像のマージンの合計（一番左の画像はネガティブマージンなので、`$thumbs-number-per-row - 1`する）
+    $total-margin-per-row: ($thumbs-number-per-row - 1) * $margin;
+    box-sizing: border-box;
+    @include margin(0, 0, 0, $margin);
+    width: calc(
+      #{get-vw($thumbs-list-width - $total-margin-per-row)} / #{$thumbs-number-per-row}
+    );
+
+    &:nth-child(n + #{$thumbs-number-per-row + 1}) {
+      @include margin($margin, 0, 0, $margin);
+    }
+
+    img {
+      width: 100%;
+    }
+  }
+}

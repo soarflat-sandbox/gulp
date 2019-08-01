@@ -1,0 +1,12 @@
+mixin listItem(image)
+  .p-thumbslist__item: img(src='/images/' + image)
+
+mixin imageList()
+  .p-thumbs
+    .p-thumbslist(class!=attributes.class)
+      +listItem('image1.jpg')
+      +listItem('image2.jpg')
+      +listItem('image3.jpg')
+      +listItem('image1.jpg')
+      +listItem('image2.jpg')
+      +listItem('image3.jpg')

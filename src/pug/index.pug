@@ -4,6 +4,7 @@ block var
   - metas = {}
   - metas.keywords = 'keywords'
   - metas.description = 'Topページです'
-block append body
-  h1 Gulp
-  a(href="./about.html") About
+block append content
+  include /_components/_imagelist/_index.pug
+  include /_components/_form/_index.pug
+  +imageList()(class="m-t-20")

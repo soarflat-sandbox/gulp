@@ -1,0 +1,10 @@
+@import '../../utilities/mixins';
+
+.p-footer {
+  display: flex;
+  align-items: center;
+  @include margin(20, 0, 0, 0);
+  @include padding(10, 15);
+  color: #fff;
+  background: #000;
+}

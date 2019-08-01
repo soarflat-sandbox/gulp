@@ -21,7 +21,8 @@ const scss = () =>
     .pipe(plumber())
     .pipe(
       gulpSass({
-        outputStyle: 'compressed'
+        // outputStyle: 'compressed'
+        outputStyle: 'expanded'
       }).on('error', gulpSass.logError)
     )
     .pipe(dest('dist/css'))

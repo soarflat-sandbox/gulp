@@ -1,9 +1,10 @@
-@import "../utilities/_variables";
+@import '../utilities/_variables';
 
 html {
-  font-family: 'ヒラギノ角ゴ Pro W3','Hiragino Kaku Gothic Pro','メイリオ','Meiryo',Helvetica,Arial,Verdana,sans-serif;
-  font-size: calc(100vw / #{$baseViewport/10});
-  @media screen and (min-width: 769px) {
-    font-size: 10px;
+  font-family: 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ',
+    'Meiryo', Helvetica, Arial, Verdana, sans-serif;
+  font-size: calc(100vw / #{$base-viewport/$base-font-size});
+  @media screen and (min-width: $tablet) {
+    font-size: $base-font-size * 1px;
   }
 }
