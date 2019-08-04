@@ -96,7 +96,7 @@ const images = () =>
 
 const pugWatcher = () => watch([paths.pug.src], pug);
 const scssWatcher = () => watch([paths.scss.src], scssWhenWatching);
-const imagesWatcher = () => watch([paths.scss.src], images);
+const imagesWatcher = () => watch([paths.images.src], images);
 const watcher = parallel(pugWatcher, scssWatcher, imagesWatcher);
 
 const server = () => {
