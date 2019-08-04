@@ -1,24 +1,25 @@
 const { src, dest, lastRun, parallel, watch } = require('gulp');
 const browserSync = require('browser-sync').create();
+const gulpTap = require('gulp-tap');
 const gulpPug = require('gulp-pug');
 const gulpSass = require('gulp-sass');
-const plumber = require('gulp-plumber');
-
 gulpSass.compiler = require('node-sass');
+const sassGraph = require('sass-graph');
+const graph = sassGraph.parseDir('src/scss/');
 
-// TODO
-// lastRunを利用して差分だけビルドするようにする？
+const baseDir = {
+  scss: 'src/scss/',
+  pug: 'src/pug/'
+};
 
 const pug = () =>
-  src(['src/pug/**/*.pug', '!src/pug/**/_*.pug'])
-    .pipe(plumber())
-    .pipe(gulpPug({ pretty: true, basedir: 'src/pug' }))
+  src([`${baseDir.pug}**/*.pug`, '!src/pug/**/_*.pug'])
+    .pipe(gulpPug({ pretty: true, basedir: baseDir.pug }))
     .pipe(dest('dist'))
     .pipe(browserSync.stream());
 
 const scss = () =>
-  src('src/scss/**/*.scss')
-    .pipe(plumber())
+  src(`${baseDir.scss}**/*.scss`)
     .pipe(
       gulpSass({
         outputStyle: 'compressed'
@@ -27,8 +28,29 @@ const scss = () =>
     .pipe(dest('dist/css'))
     .pipe(browserSync.stream());
 
-const pugWatcher = () => watch(['src/pug/**/*.pug'], pug);
-const scssWatcher = () => watch(['src/scss/**/*.scss'], scss);
+const scssWhenWatching = () =>
+  src(`${baseDir.scss}**/*.scss`, { since: lastRun(scssWhenWatching) }).pipe(
+    gulpTap(file => {
+      const files = [file.path];
+      const addParent = childPath =>
+        graph.visitAncestors(childPath, parent => {
+          if (!files.includes(parent)) files.push(parent);
+          return addParent(parent);
+        });
+      addParent(file.path);
+      src(files)
+        .pipe(
+          gulpSass({
+            outputStyle: 'compressed'
+          }).on('error', gulpSass.logError)
+        )
+        .pipe(dest('dist/css'))
+        .pipe(browserSync.stream());
+    })
+  );
+
+const pugWatcher = () => watch([`${baseDir.pug}**/*.pug`], pug);
+const scssWatcher = () => watch([`${baseDir.scss}**/*.scss`], scssWhenWatching);
 const watcher = parallel(pugWatcher, scssWatcher);
 
 const server = () => {
