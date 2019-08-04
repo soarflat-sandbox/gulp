@@ -7,29 +7,35 @@ gulpSass.compiler = require('node-sass');
 const sassGraph = require('sass-graph');
 const graph = sassGraph.parseDir('src/scss/');
 
-const baseDir = {
-  scss: 'src/scss/',
-  pug: 'src/pug/'
+const paths = {
+  pug: {
+    src: './src/pug/**/*.pug',
+    dest: './dist/'
+  },
+  scss: {
+    src: './src/scss/**/*.scss',
+    dest: './dist/css'
+  }
 };
 
 const pug = () =>
-  src([`${baseDir.pug}**/*.pug`, '!src/pug/**/_*.pug'])
+  src([paths.pug.src, '!src/pug/**/_*.pug'])
     .pipe(gulpPug({ pretty: true, basedir: baseDir.pug }))
-    .pipe(dest('dist'))
+    .pipe(dest(paths.pug.dest))
     .pipe(browserSync.stream());
 
 const scss = () =>
-  src(`${baseDir.scss}**/*.scss`)
+  src(paths.scss.src)
     .pipe(
       gulpSass({
         outputStyle: 'compressed'
       }).on('error', gulpSass.logError)
     )
-    .pipe(dest('dist/css'))
+    .pipe(dest(paths.scss.dest))
     .pipe(browserSync.stream());
 
 const scssWhenWatching = () =>
-  src(`${baseDir.scss}**/*.scss`, { since: lastRun(scssWhenWatching) }).pipe(
+  src(paths.scss.src, { since: lastRun(scssWhenWatching) }).pipe(
     gulpTap(file => {
       const files = [file.path];
       const addParent = childPath =>
@@ -44,13 +50,13 @@ const scssWhenWatching = () =>
             outputStyle: 'compressed'
           }).on('error', gulpSass.logError)
         )
-        .pipe(dest('dist/css'))
+        .pipe(dest(paths.scss.dest))
         .pipe(browserSync.stream());
     })
   );
 
-const pugWatcher = () => watch([`${baseDir.pug}**/*.pug`], pug);
-const scssWatcher = () => watch([`${baseDir.scss}**/*.scss`], scssWhenWatching);
+const pugWatcher = () => watch([paths.pug.src], pug);
+const scssWatcher = () => watch([paths.scss.src], scssWhenWatching);
 const watcher = parallel(pugWatcher, scssWatcher);
 
 const server = () => {
