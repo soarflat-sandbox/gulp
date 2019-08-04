@@ -47,7 +47,7 @@ const scss = () =>
 
 const graph = sassGraph.parseDir('./src/scss/');
 // watch時にScssをコンパイルするタスク
-// 最後変更したScssファイルのみをコンパイルする
+// 更新したScssファイルのみをコンパイルする
 // _base.scssのような複数ファイルでimportされているファイルを更新した場合
 // インポートしているファイルもコンパイルする
 const scssWhenWatching = () =>
@@ -71,27 +71,27 @@ const scssWhenWatching = () =>
     })
   );
 
-// imageminのオプション
-const imageminOption = [
-  pngquant({
-    quality: [0.7, 0.85]
-  }),
-  mozjpeg({
-    quality: 85
-  }),
-  imagemin.gifsicle(),
-  imagemin.jpegtran(),
-  imagemin.optipng(),
-  imagemin.svgo({
-    removeViewBox: false
-  })
-];
 // 画像を圧縮するタスク
 const images = () =>
   src(paths.images.src, {
     since: lastRun(images)
   })
-    .pipe(imagemin(imageminOption))
+    .pipe(
+      imagemin([
+        pngquant({
+          quality: [0.7, 0.85]
+        }),
+        mozjpeg({
+          quality: 85
+        }),
+        imagemin.gifsicle(),
+        imagemin.jpegtran(),
+        imagemin.optipng(),
+        imagemin.svgo({
+          removeViewBox: false
+        })
+      ])
+    )
     .pipe(dest(paths.images.dest));
 
 const pugWatcher = () => watch([paths.pug.src], pug);
