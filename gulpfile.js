@@ -1,4 +1,5 @@
 const { src, dest, lastRun, parallel, watch } = require('gulp');
+const beautify = require('gulp-beautify');
 const browserSync = require('browser-sync').create();
 const imagemin = require('gulp-imagemin');
 const gulpTap = require('gulp-tap');
@@ -28,7 +29,8 @@ const paths = {
 // Pugをコンパイルするタスク
 const pug = () =>
   src([paths.pug.src, '!src/pug/**/_*.pug'])
-    .pipe(gulpPug({ pretty: true, basedir: baseDir.pug }))
+    .pipe(gulpPug({ pretty: true, basedir: './src/pug' }))
+    .pipe(beautify.html({ indent_size: 2 }))
     .pipe(dest(paths.pug.dest))
     .pipe(browserSync.stream());
 
