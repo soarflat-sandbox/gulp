@@ -1,14 +1,14 @@
 const { src, dest, lastRun, parallel, watch } = require('gulp');
 const browserSync = require('browser-sync').create();
+const imagemin = require('gulp-imagemin');
 const gulpTap = require('gulp-tap');
 const gulpPug = require('gulp-pug');
 const gulpSass = require('gulp-sass');
-gulpSass.compiler = require('node-sass');
-const sassGraph = require('sass-graph');
-const graph = sassGraph.parseDir('src/scss/');
-const imagemin = require('gulp-imagemin');
 const mozjpeg = require('imagemin-mozjpeg');
 const pngquant = require('imagemin-pngquant');
+const sassGraph = require('sass-graph');
+
+gulpSass.compiler = require('node-sass');
 
 const paths = {
   pug: {
@@ -25,12 +25,14 @@ const paths = {
   }
 };
 
+// Pugをコンパイルするタスク
 const pug = () =>
   src([paths.pug.src, '!src/pug/**/_*.pug'])
     .pipe(gulpPug({ pretty: true, basedir: baseDir.pug }))
     .pipe(dest(paths.pug.dest))
     .pipe(browserSync.stream());
 
+// Scssをコンパイルするタスク
 const scss = () =>
   src(paths.scss.src)
     .pipe(
@@ -41,6 +43,11 @@ const scss = () =>
     .pipe(dest(paths.scss.dest))
     .pipe(browserSync.stream());
 
+const graph = sassGraph.parseDir('./src/scss/');
+// watch時にScssをコンパイルするタスク
+// 最後変更したScssファイルのみをコンパイルする
+// _base.scssのような複数ファイルでimportされているファイルを更新した場合
+// インポートしているファイルもコンパイルする
 const scssWhenWatching = () =>
   src(paths.scss.src, { since: lastRun(scssWhenWatching) }).pipe(
     gulpTap(file => {
@@ -62,6 +69,7 @@ const scssWhenWatching = () =>
     })
   );
 
+// imageminのオプション
 const imageminOption = [
   pngquant({
     quality: [0.7, 0.85]
@@ -76,7 +84,7 @@ const imageminOption = [
     removeViewBox: false
   })
 ];
-
+// 画像を圧縮するタスク
 const images = () =>
   src(paths.images.src, {
     since: lastRun(images)
@@ -103,4 +111,4 @@ exports.images = images;
 exports.watcher = watcher;
 exports.server = server;
 exports.dev = parallel(server, watcher);
-exports.default = parallel(pug, scss);
+exports.default = parallel(pug, scss, images);
