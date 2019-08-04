@@ -6,6 +6,9 @@ const gulpSass = require('gulp-sass');
 gulpSass.compiler = require('node-sass');
 const sassGraph = require('sass-graph');
 const graph = sassGraph.parseDir('src/scss/');
+const imagemin = require('gulp-imagemin');
+const mozjpeg = require('imagemin-mozjpeg');
+const pngquant = require('imagemin-pngquant');
 
 const paths = {
   pug: {
@@ -15,6 +18,10 @@ const paths = {
   scss: {
     src: './src/scss/**/*.scss',
     dest: './dist/css'
+  },
+  images: {
+    src: './src/images/**/*.{jpg,jpeg,png,svg,gif}',
+    dest: './dist/images/'
   }
 };
 
@@ -55,9 +62,32 @@ const scssWhenWatching = () =>
     })
   );
 
+const imageminOption = [
+  pngquant({
+    quality: [0.7, 0.85]
+  }),
+  mozjpeg({
+    quality: 85
+  }),
+  imagemin.gifsicle(),
+  imagemin.jpegtran(),
+  imagemin.optipng(),
+  imagemin.svgo({
+    removeViewBox: false
+  })
+];
+
+const images = () =>
+  src(paths.images.src, {
+    since: lastRun(images)
+  })
+    .pipe(imagemin(imageminOption))
+    .pipe(dest(paths.images.dest));
+
 const pugWatcher = () => watch([paths.pug.src], pug);
 const scssWatcher = () => watch([paths.scss.src], scssWhenWatching);
-const watcher = parallel(pugWatcher, scssWatcher);
+const imagesWatcher = () => watch([paths.scss.src], images);
+const watcher = parallel(pugWatcher, scssWatcher, imagesWatcher);
 
 const server = () => {
   browserSync.init({
@@ -69,6 +99,7 @@ const server = () => {
 
 exports.pug = pug;
 exports.scss = scss;
+exports.images = images;
 exports.watcher = watcher;
 exports.server = server;
 exports.dev = parallel(server, watcher);
