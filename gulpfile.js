@@ -45,7 +45,6 @@ const scss = () =>
     .pipe(dest(paths.scss.dest))
     .pipe(browserSync.stream());
 
-const graph = sassGraph.parseDir('./src/scss/');
 // watch時にScssをコンパイルするタスク
 // 更新したScssファイルのみをコンパイルする
 // _base.scssのような複数ファイルでimportされているファイルを更新した場合
@@ -53,6 +52,7 @@ const graph = sassGraph.parseDir('./src/scss/');
 const scssWhenWatching = () =>
   src(paths.scss.src, { since: lastRun(scssWhenWatching) }).pipe(
     gulpTap(file => {
+      const graph = sassGraph.parseDir('./src/scss/');
       const files = [file.path];
       const addParent = childPath =>
         graph.visitAncestors(childPath, parent => {
