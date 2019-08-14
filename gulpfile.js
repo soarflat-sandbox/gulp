@@ -48,8 +48,8 @@ const scss = () =>
 
 // watch時にScssをコンパイルするタスク
 // 更新したScssファイルのみをコンパイルする
-// _base.scssのような複数ファイルでimportされているファイルを更新した場合
-// インポートしているファイルもコンパイルする
+// _base.scssのような複数のファイルでimportされているファイルを更新した場合
+// それをimportしている複数のファイルもコンパイルする
 const scssWhenWatching = () =>
   src(paths.scss.src, { since: lastRun(scssWhenWatching) }).pipe(
     gulpTap(file => {
@@ -120,9 +120,9 @@ const build = parallel(pug, scss, images);
 exports.pug = pug;
 exports.scss = scss;
 exports.images = images;
+exports.clean = clean;
 exports.watcher = watcher;
 exports.server = server;
 exports.dev = parallel(server, watcher);
-exports.clean = clean;
 exports.publish = series(clean, build);
 exports.default = build;
