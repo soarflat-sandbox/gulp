@@ -1,4 +1,4 @@
-const { src, dest, lastRun, parallel, watch } = require('gulp');
+const { src, dest, lastRun, parallel, series, watch } = require('gulp');
 const beautify = require('gulp-beautify');
 const browserSync = require('browser-sync').create();
 const imagemin = require('gulp-imagemin');
@@ -8,6 +8,7 @@ const gulpSass = require('gulp-sass');
 const mozjpeg = require('imagemin-mozjpeg');
 const pngquant = require('imagemin-pngquant');
 const sassGraph = require('sass-graph');
+const del = require('del');
 
 gulpSass.compiler = require('node-sass');
 
@@ -94,6 +95,13 @@ const images = () =>
     )
     .pipe(dest(paths.images.dest));
 
+// 出力先のファイル削除するタスク（開発途中で不要になったごみファイルを削除するために利用する）
+// JSはwebpackで出力する想定のため、`js`ディレクトリは削除しない
+const clean = async cb => {
+  const deletedPaths = await del(['dist/!(js)'], cb);
+  console.log('Deleted files and directories:\n', deletedPaths.join('\n'));
+};
+
 const pugWatcher = () => watch([paths.pug.src], pug);
 const scssWatcher = () => watch([paths.scss.src], scssWhenWatching);
 const imagesWatcher = () => watch([paths.images.src], images);
@@ -107,10 +115,14 @@ const server = () => {
   });
 };
 
+const build = parallel(pug, scss, images);
+
 exports.pug = pug;
 exports.scss = scss;
 exports.images = images;
 exports.watcher = watcher;
 exports.server = server;
 exports.dev = parallel(server, watcher);
-exports.default = parallel(pug, scss, images);
+exports.clean = clean;
+exports.publish = series(clean, build);
+exports.default = build;
