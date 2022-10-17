@@ -4,27 +4,25 @@ const browserSync = require('browser-sync').create();
 const imagemin = require('gulp-imagemin');
 const gulpTap = require('gulp-tap');
 const gulpPug = require('gulp-pug');
-const gulpSass = require('gulp-sass');
+const sass = require('gulp-sass')(require('sass'));
 const mozjpeg = require('imagemin-mozjpeg');
 const pngquant = require('imagemin-pngquant');
 const sassGraph = require('sass-graph');
 const del = require('del');
 
-gulpSass.compiler = require('node-sass');
-
 const paths = {
   pug: {
     src: './src/pug/**/*.pug',
-    dest: './dist/'
+    dest: './dist/',
   },
   scss: {
     src: './src/scss/**/*.scss',
-    dest: './dist/css'
+    dest: './dist/css',
   },
   images: {
     src: './src/images/**/*.{jpg,jpeg,png,svg,gif}',
-    dest: './dist/images/'
-  }
+    dest: './dist/images/',
+  },
 };
 
 // Pugをコンパイルするタスク
@@ -39,9 +37,9 @@ const pug = () =>
 const scss = () =>
   src(paths.scss.src)
     .pipe(
-      gulpSass({
-        outputStyle: 'compressed'
-      }).on('error', gulpSass.logError)
+      sass({
+        outputStyle: 'compressed',
+      }).on('error', sass.logError)
     )
     .pipe(dest(paths.scss.dest))
     .pipe(browserSync.stream());
@@ -63,9 +61,9 @@ const scssWhenWatching = () =>
       addParent(file.path);
       src(files)
         .pipe(
-          gulpSass({
-            outputStyle: 'compressed'
-          }).on('error', gulpSass.logError)
+          sass({
+            outputStyle: 'compressed',
+          }).on('error', sass.logError)
         )
         .pipe(dest(paths.scss.dest))
         .pipe(browserSync.stream());
@@ -75,22 +73,22 @@ const scssWhenWatching = () =>
 // 画像を圧縮するタスク
 const images = () =>
   src(paths.images.src, {
-    since: lastRun(images)
+    since: lastRun(images),
   })
     .pipe(
       imagemin([
         pngquant({
-          quality: [0.7, 0.85]
+          quality: [0.7, 0.85],
         }),
         mozjpeg({
-          quality: 85
+          quality: 85,
         }),
         imagemin.gifsicle(),
         imagemin.jpegtran(),
         imagemin.optipng(),
         imagemin.svgo({
-          removeViewBox: false
-        })
+          removeViewBox: false,
+        }),
       ])
     )
     .pipe(dest(paths.images.dest));
@@ -110,8 +108,8 @@ const watcher = parallel(pugWatcher, scssWatcher, imagesWatcher);
 const server = () => {
   browserSync.init({
     server: {
-      baseDir: './dist'
-    }
+      baseDir: './dist',
+    },
   });
 };
 
